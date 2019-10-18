@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="resulticks-cordova-plugin-0e0cce15_ffa7_484b_9b10_4703bc77bc16" version="0.1.0"
+<plugin id="resulticks-cordova-plugin-0e0cce15-ffa7-484b-9b10-4703bc77bc16" version="0.1.0"
 	xmlns="http://apache.org/cordova/ns/plugins/1.0"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<name>ReCordovaPlugin</name>
