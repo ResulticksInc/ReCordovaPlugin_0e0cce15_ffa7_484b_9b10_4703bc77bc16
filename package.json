@@ -1,6 +1,6 @@
 {
 	"name": "recordovaplugininh",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,7 @@
 		"type": "git",
 		"url": "git+https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16.git"
 	},
-	"keywords": [ "recordovaplugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16" ],
+	"keywords": [ "recordovaplugininh" ],
 	"author": "ResultickInc",
 	"license": "ISC",
 	"bugs": {
