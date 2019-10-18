@@ -1,20 +1,22 @@
 {
-	"name": "recordovaplugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16",
-	"version": "0.1.0",
-	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16.git"
-	},
-	"keywords": [ "recordovaplugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16" ],
-	"author": "ResultickInc",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16/issues"
-	},
-	"homepage": "https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16#readme",
-	"description": ""
+  "name": "recordovaplugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16.git"
+  },
+  "keywords": [
+    "recordovaplugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16"
+  ],
+  "author": "ResultickInc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16/issues"
+  },
+  "homepage": "https://github.com/ResulticksInc/ReCordovaPlugin_0e0cce15_ffa7_484b_9b10_4703bc77bc16#readme",
+  "description": ""
 }
