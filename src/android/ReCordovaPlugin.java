@@ -162,13 +162,14 @@ public class ReCordovaPlugin extends CordovaPlugin {
                 } else {
                     Log.e("User events Exception: ", "Expected one non-empty string argument.");
                 }
+            }
 
             });
 
         }
 
 
-        private void screenNavigation (JSONArray message, CallbackContext callbackContext){
+        private void screenNavigation (JSONArray message, CallbackContext callbackContext) {
 
             cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
@@ -185,6 +186,7 @@ public class ReCordovaPlugin extends CordovaPlugin {
                     } else {
                         Log.e("userNavigation Exception: ", "Expected one non-empty string argument.");
                     }
+                }
                 });
 
             }
@@ -214,10 +216,12 @@ public class ReCordovaPlugin extends CordovaPlugin {
 
                             Log.e("register Exception: ", "Expected one non-empty string argument.");
                         }
+                    }
                     });
                 }
 
-                private void customEvent (JSONArray message, CallbackContext callbackContext){
+                private void customEvent (JSONArray message, CallbackContext callbackContext) {
+
                     cordova.getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             if (message != null && message.length() > 0) {
@@ -241,7 +245,7 @@ public class ReCordovaPlugin extends CordovaPlugin {
                             } else {
                                 Log.e("User events Exception: ", "Expected one non-empty string argument.");
                             }
-
+                        }
                         });
                     }
 
