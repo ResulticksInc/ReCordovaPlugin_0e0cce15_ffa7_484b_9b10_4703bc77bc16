@@ -46,11 +46,40 @@ module.exports.notificationPayLoadReceiver = function (arg0, success, error) {
 	exec(success, error, 'ReCordovaPlugin', 'notificationPayLoadReceiver', [arg0]);
 };
 
+
+module.exports.deleteNotificationByNotificationId = function (arg0, success, error) {
+	exec(success, error, 'ReCordovaPlugin', 'deleteNotificationByNotificationId', [arg0]);
+};
+module.exports.deleteNotificationByCampaignId = function (arg0, success, error) {
+	exec(success, error, 'ReCordovaPlugin', 'deleteNotificationByCampaignId', [arg0]);
+};
+module.exports.getReadNotificationCount = function (arg0, success, error) {
+	exec(success, error, 'ReCordovaPlugin', 'getReadNotificationCount', [arg0]);
+};
+module.exports.getUnReadNotificationCount = function (arg0, success, error) {
+	exec(success, error, 'ReCordovaPlugin', 'getUnReadNotificationCount', [arg0]);
+};
+module.exports.readNotification = function (arg0, success, error) {
+	exec(success, error, 'ReCordovaPlugin', 'readNotification', [arg0]);
+};
+
+module.exports.unReadNotification = function (arg0, success, error) {
+	exec(success, error, 'ReCordovaPlugin', 'unReadNotification', [arg0]);
+};
+
+
+
+
+
+module.exports.getViewJson = function (arg0, success, error) {
+	getViewJsons();
+};
+
 // Capture Screen Tree
 var fieldNeedToTrack = [];
 var fieldTracked = [];
 
-function getViewJson() {
+function getViewJsons() {
 	try {
 		var viewJson = [];
 		$('input,button,select,textarea').each(function () {

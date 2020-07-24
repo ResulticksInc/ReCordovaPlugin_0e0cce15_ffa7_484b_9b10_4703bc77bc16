@@ -22,6 +22,7 @@ import java.util.Calendar;
 
 import io.mob.resu.reandroidsdk.AppConstants;
 import io.mob.resu.reandroidsdk.AppLifecyclePresenter;
+import io.mob.resu.reandroidsdk.IDeepLinkInterface;
 import io.mob.resu.reandroidsdk.MRegisterUser;
 import io.mob.resu.reandroidsdk.ReAndroidSDK;
 import io.mob.resu.reandroidsdk.error.Log;
@@ -41,7 +42,7 @@ public class ReCordovaPlugin extends CordovaPlugin {
     ArrayList<JSONObject> notificationByObject;
     private Calendar oldCalendar = Calendar.getInstance();
     private Calendar sCalendar = Calendar.getInstance();
-    String tag = "getViewJson";
+    String tag = "ReCordovaPlugin.getViewJson";
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -70,6 +71,25 @@ public class ReCordovaPlugin extends CordovaPlugin {
         AppConstants.isCordova = true;
         android.util.Log.d(TAG, "==> ReCordovaPlugin initialize");
         LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("SocketCallBacks"));
+
+        ReAndroidSDK.getInstance(cordova.getActivity()).getCampaignData(new IDeepLinkInterface() {
+            @Override
+            public void onInstallDataReceived(String data) {
+                String callBack = "javascript:" + "ResulticksDeeplinkData" + "(" + data + ")";
+                ReCordovaPlugin.gWebView.sendJavascript(callBack);
+                android.util.Log.e(TAG, "==> ReCordovaPlugin getCampaignData: " + data);
+
+            }
+
+            @Override
+            public void onDeepLinkData(String data) {
+                android.util.Log.e(TAG, "==> ReCordovaPlugin getCampaignData: " + data);
+                String callBack = "javascript:" + "ResulticksDeeplinkData" + "(" + data + ")";
+                ReCordovaPlugin.gWebView.sendJavascript(callBack);
+
+            }
+
+        });
     }
 
     @Override
@@ -101,6 +121,14 @@ public class ReCordovaPlugin extends CordovaPlugin {
                 this.deleteNotification(args, callbackContext);
                 break;
 
+            case "deleteNotificationByNotificationId":
+                this.deleteNotificationByNotificationId(args, callbackContext);
+                break;
+
+            case "deleteNotificationByCampaignId":
+                this.deleteNotificationByCampaignId(args, callbackContext);
+                break;
+
             case "notificationPayLoadReceiver":
                 this.notificationPayLoadReceiver(args, callbackContext);
                 break;
@@ -115,6 +143,22 @@ public class ReCordovaPlugin extends CordovaPlugin {
 
             case "getFieldTrackData": // Enable field track
                 this.getFieldTrackData(args, callbackContext);
+                break;
+
+            case "getReadNotificationCount": // Enable field track
+                this.getReadNotificationCount(args, callbackContext);
+                break;
+
+            case "getUnReadNotificationCount": // Enable field track
+                this.getUnReadNotificationCount(args, callbackContext);
+                break;
+
+            case "readNotification": // Enable field track
+                this.readNotification(args, callbackContext);
+                break;
+
+            case "unReadNotification": // Enable field track
+                this.unReadNotification(args, callbackContext);
                 break;
 
 
@@ -241,6 +285,39 @@ public class ReCordovaPlugin extends CordovaPlugin {
         }
     }
 
+    private void deleteNotificationByNotificationId(JSONArray message, CallbackContext callbackContext) {
+
+        if (message != null && message.length() > 0) {
+
+            try {
+                JSONObject jsonObject = message.getJSONObject(0);
+                ReAndroidSDK.getInstance(cordova.getActivity()).deleteNotificationByNotificationId(jsonObject.optString("notificationId"));
+                Log.e("Notification : ", "Delete successfully");
+            } catch (Exception e) {
+                Log.e("Delete Notification Exception: ", String.valueOf(e.getMessage()));
+            }
+        } else {
+            Log.e("Delete Notification Exception : ", "Expected one non-empty string argument.");
+        }
+    }
+
+    private void deleteNotificationByCampaignId(JSONArray message, CallbackContext callbackContext) {
+
+        if (message != null && message.length() > 0) {
+
+            try {
+                JSONObject jsonObject = message.getJSONObject(0);
+                ReAndroidSDK.getInstance(cordova.getActivity()).deleteNotificationByCampaignId(jsonObject.optString("campaignId"));
+                Log.e("Notification : ", "Delete successfully");
+            } catch (Exception e) {
+                Log.e("Delete Notification Exception: ", String.valueOf(e.getMessage()));
+            }
+        } else {
+            Log.e("Delete Notification Exception : ", "Expected one non-empty string argument.");
+        }
+    }
+
+
     private void getNotification(final JSONArray args, CallbackContext callbackContext) {
         try {
             notificationByObject = ReAndroidSDK.getInstance(cordova.getActivity()).getNotificationByObject();
@@ -250,6 +327,59 @@ public class ReCordovaPlugin extends CordovaPlugin {
             e.printStackTrace();
         }
     }
+
+    private void getReadNotificationCount(final JSONArray args, CallbackContext callbackContext) {
+        try {
+            int count = ReAndroidSDK.getInstance(cordova.getActivity()).getReadNotificationCount();
+            callbackContext.success("" + count);
+            Log.e("getReadNotificationCount : ", " successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getUnReadNotificationCount(final JSONArray args, CallbackContext callbackContext) {
+        try {
+            int count = ReAndroidSDK.getInstance(cordova.getActivity()).getUnReadNotificationCount();
+            callbackContext.success("" + count);
+            Log.e("getUnReadNotificationCount : ", " successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readNotification(JSONArray message, CallbackContext callbackContext) {
+
+        if (message != null && message.length() > 0) {
+
+            try {
+                JSONObject jsonObject = message.getJSONObject(0);
+                ReAndroidSDK.getInstance(cordova.getActivity()).readNotification(jsonObject.optString("campaignId"));
+                Log.e("readNotification : ", " successfully");
+            } catch (Exception e) {
+                Log.e("readNotification Notification Exception: ", String.valueOf(e.getMessage()));
+            }
+        } else {
+            Log.e("readNotification  Exception : ", "Expected one non-empty string argument.");
+        }
+    }
+
+    private void unReadNotification(JSONArray message, CallbackContext callbackContext) {
+
+        if (message != null && message.length() > 0) {
+
+            try {
+                JSONObject jsonObject = message.getJSONObject(0);
+                ReAndroidSDK.getInstance(cordova.getActivity()).unReadNotification(jsonObject.optString("campaignId"));
+                Log.e("readNotification : ", " successfully");
+            } catch (Exception e) {
+                Log.e("readNotification Notification Exception: ", String.valueOf(e.getMessage()));
+            }
+        } else {
+            Log.e("readNotification  Exception : ", "Expected one non-empty string argument.");
+        }
+    }
+
 
     private void locationUpdate(final JSONArray message, CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
