@@ -6,8 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -21,12 +22,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.mob.resu.reandroidsdk.AppConstants;
+import io.mob.resu.reandroidsdk.AppRuleListener;
 import io.mob.resu.reandroidsdk.AppLifecyclePresenter;
 import io.mob.resu.reandroidsdk.IDeepLinkInterface;
 import io.mob.resu.reandroidsdk.MRegisterUser;
 import io.mob.resu.reandroidsdk.ReAndroidSDK;
 import io.mob.resu.reandroidsdk.error.Log;
-
 
 /**
  * This class echoes a string called from JavaScript.
@@ -57,7 +58,6 @@ public class ReCordovaPlugin extends CordovaPlugin {
             }
         }
 
-
     };
 
     public ReCordovaPlugin() {
@@ -70,7 +70,8 @@ public class ReCordovaPlugin extends CordovaPlugin {
         AppConstants.isHyBird = true;
         AppConstants.isCordova = true;
         android.util.Log.d(TAG, "==> ReCordovaPlugin initialize");
-        LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("SocketCallBacks"));
+        LocalBroadcastManager.getInstance(cordova.getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter("SocketCallBacks"));
 
         ReAndroidSDK.getInstance(cordova.getActivity()).getCampaignData(new IDeepLinkInterface() {
             @Override
@@ -160,37 +161,50 @@ public class ReCordovaPlugin extends CordovaPlugin {
             case "unReadNotification": // Enable field track
                 this.unReadNotification(args, callbackContext);
                 break;
-
             case "notificationCTAClicked": // Enable field track
                 this.notificationCTAClicked(args, callbackContext);
                 break;
-            default:
 
-                break;
             case "appConversionTracking": // Enable field track
                 this.appConversionTracking(args, callbackContext);
+                break;
+
+            default:
+
                 break;
 
         }
         return false;
     }
-    private void appConversionTracking(JSONArray args, CallbackContext callbackContext) {
+
+    private void appConversionTracking(JSONArray message, CallbackContext callbackContext) {
         try {
-            ReAndroidSDK.getInstance(cordova.getActivity()).appConversionTracking();
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = message.getJSONObject(0);
+
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            if (jsonObject != null) {
+                ReAndroidSDK.getInstance(cordova.getActivity()).appConversionTracking(jsonObject);
+            } else {
+                ReAndroidSDK.getInstance(cordova.getActivity()).appConversionTracking();
+            }
         } catch (Exception e) {
             Log.e("appConversionTracking  Exception: ", String.valueOf(e.getMessage()));
         }
 
     }
 
-private void notificationCTAClicked(JSONArray message, CallbackContext callbackContext) {
-
+    private void notificationCTAClicked(JSONArray message, CallbackContext callbackContext) {
 
         if (message != null && message.length() > 0) {
 
             try {
                 JSONObject jsonObject = message.getJSONObject(0);
-                ReAndroidSDK.getInstance(cordova.getActivity()).notificationCTAClicked(jsonObject.optString("campaignId"), jsonObject.optString("actionId"));
+                ReAndroidSDK.getInstance(cordova.getActivity())
+                        .notificationCTAClicked(jsonObject.optString("campaignId"), jsonObject.optString("actionId"));
                 Log.e("notificationCTAClicked : ", " successfully");
             } catch (Exception e) {
                 Log.e("notificationCTAClicked  Exception: ", String.valueOf(e.getMessage()));
@@ -199,10 +213,7 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
             Log.e("notificationCTAClicked  Exception : ", "Expected one non-empty string argument.");
         }
 
-
     }
-
-
 
     private void getFieldTrackData(JSONArray args, CallbackContext callbackContext) {
 
@@ -213,12 +224,9 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
             if (list != null) {
                 callbackContext.success(new JSONArray(list).toString());
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -231,7 +239,6 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -274,7 +281,6 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
         handler.removeCallbacks(runnable);
         handler.postDelayed(runnable, 1000);
     }
-
 
     private static int pxToDp(int px) {
         return (int) ((float) px / Resources.getSystem().getDisplayMetrics().density);
@@ -324,7 +330,8 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
 
             try {
                 JSONObject jsonObject = message.getJSONObject(0);
-                ReAndroidSDK.getInstance(cordova.getActivity()).deleteNotificationByNotificationId(jsonObject.optString("notificationId"));
+                ReAndroidSDK.getInstance(cordova.getActivity())
+                        .deleteNotificationByNotificationId(jsonObject.optString("notificationId"));
                 Log.e("Notification : ", "Delete successfully");
             } catch (Exception e) {
                 Log.e("Delete Notification Exception: ", String.valueOf(e.getMessage()));
@@ -340,7 +347,8 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
 
             try {
                 JSONObject jsonObject = message.getJSONObject(0);
-                ReAndroidSDK.getInstance(cordova.getActivity()).deleteNotificationByCampaignId(jsonObject.optString("campaignId"));
+                ReAndroidSDK.getInstance(cordova.getActivity())
+                        .deleteNotificationByCampaignId(jsonObject.optString("campaignId"));
                 Log.e("Notification : ", "Delete successfully");
             } catch (Exception e) {
                 Log.e("Delete Notification Exception: ", String.valueOf(e.getMessage()));
@@ -349,7 +357,6 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
             Log.e("Delete Notification Exception : ", "Expected one non-empty string argument.");
         }
     }
-
 
     private void getNotification(final JSONArray args, CallbackContext callbackContext) {
         try {
@@ -413,7 +420,6 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
         }
     }
 
-
     private void locationUpdate(final JSONArray message, CallbackContext callbackContext) {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -437,16 +443,18 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
 
     }
 
-
     private void screenNavigation(final JSONArray message, CallbackContext callbackContext) {
 
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 if (message != null && message.length() > 0) {
                     try {
+
                         JSONObject jsonObject = message.getJSONObject(0);
+                        AppConstants.CURRENT_FRAGMENT_NAME = jsonObject.optString("screenName");
                         screenTracking(jsonObject.optString("screenName"));
                         OldScreenName = newScreenName;
+                        AppRuleListener.LAST_FRAGMENT_NAME = OldScreenName;
                         newScreenName = jsonObject.optString("screenName");
 
                     } catch (Exception e) {
@@ -530,12 +538,14 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
             sCalendar = Calendar.getInstance();
 
             if (OldScreenName != null) {
-                AppLifecyclePresenter.getInstance().onSessionStop(cordova.getActivity(), oldCalendar, sCalendar, OldScreenName, null, null);
+                AppLifecyclePresenter.getInstance().onSessionStop(cordova.getActivity(), oldCalendar, sCalendar,
+                        OldScreenName, null, null);
                 AppLifecyclePresenter.getInstance().onSessionStartFragment(cordova.getActivity(), OldScreenName, null);
             }
             if (newScreenName == null)
                 newScreenName = screenName;
 
+            ReAndroidSDK.onPageChangeListener.onPageChanged(screenName, "No fragment available");
         } catch (Exception e) {
             Log.e("screenTracking Exception: ", "" + e.getMessage());
 
@@ -554,6 +564,5 @@ private void notificationCTAClicked(JSONArray message, CallbackContext callbackC
         oldCalendar = Calendar.getInstance();
         sCalendar = Calendar.getInstance();
     }
-
 
 }
